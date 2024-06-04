@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketingauth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketingauth
+  template:
+    metadata:
+      labels:
+        app: ticketingauth
+    spec:
+      containers:
+        - name: ticketingauth
+          image: williangrios/ticketingauth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketingauth-srv
+spec:
+  selector:
+    app: ticketingauth
+  ports:
+    - name: ticketingauth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
