@@ -1,0 +1,20 @@
+### Requisição GET para not found
+GET http://ticketing.dev/api/users/notexists
+
+### Requisição POST para Signup
+POST http://ticketing.dev/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Requisição POST com dados inválidos (email inválido)
+POST http://ticketing.dev/api/users/signup
+Content-Type: application/json
+
+{
+  "email": "invalid-email",
+  "password": "12"
+}
