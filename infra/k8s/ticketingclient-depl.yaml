@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketingclient-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketingclient
+      # seção template descreve como cada POD é criado e gerenciado por este deployment
+  template:
+    metadata:
+      labels:
+        app: ticketingclient
+      # spec descreve como cada POD deve se comportar
+    spec:
+      containers:
+        - name: ticketingclient
+          # se eu estiver usando google cloud preciso mudar isso abaixo
+          image: williangrios/ticketingclient
+# escrevendo o serviço do passo 2 aqui no mesmo arquivo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketingclient-srv
+spec:
+  selector:
+    # este selector é como o serviço vai encontrar o POD para os quais deve controlar a solicitação
+    app: ticketingclient
+  ports:
+    - name: ticketingclient
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
