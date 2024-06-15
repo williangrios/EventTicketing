@@ -1,0 +1,20 @@
+### Requisição GET para not found
+GET http://ticketing.dev/api/users/notexists
+
+### Requisição POST para Signin
+POST https://ticketing.dev/api/users/signin
+Content-Type: application/json
+
+{
+  "email": "willian@gmail.com",
+  "password": "pwdWillian"
+}
+
+### Requisição POST com usuário não cadastrado
+POST https://ticketing.dev/api/users/signin
+Content-Type: application/json
+
+{
+  "email": "willian@gmail.com",
+  "password": "124"
+}
