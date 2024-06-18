@@ -16,6 +16,8 @@ spec:
         - name: ticketingauth
           image: williangrios/ticketingauth
           env:
+            - name: MONGO_URI
+              value: 'mongodb://ticketingauth-mongo-srv:27017/ticketingauth'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
