@@ -20,6 +20,13 @@ spec:
                 name: ticketingauth-srv
                 port:
                   number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
           # essa expressão vai pegar todas as requisições que não deram match anteriormente
           # por isso o client tem que ficar por ultimo
           - path: /?(.*)
