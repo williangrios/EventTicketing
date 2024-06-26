@@ -1,6 +1,20 @@
+import { natsWrapper } from '../../nats-wrapper'
 import request from 'supertest'
 import { app } from '../../app'
 import { Ticket } from '../../model/ticket'
+
+it('publishes an event', async () => {
+  const salvou = await request(app)
+    .post('/api/tickets')
+    .set('Cookie', global.signUp())
+    .send({
+      title: 'valid title',
+      price: 23,
+    })
+    .expect(201)
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled()
+})
 
 it('has a route handler listenint to /api/tickets for post requests', async () => {
   const response = await request(app).post('/api/tickets').send({})
