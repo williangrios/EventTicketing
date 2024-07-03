@@ -2,9 +2,8 @@ import jwt from 'jsonwebtoken'
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
-import { validateRequest } from '../middlewares/validate-request'
 import { User } from '../models/user'
-import { BadRequestError } from '../errors/bad-request-error'
+import { BadRequestError, validateRequest } from '@wrticketing/commom-v2'
 
 const router = express.Router()
 
