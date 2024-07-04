@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketingpayments-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ticketingpayments
+  template:
+    metadata:
+      labels:
+        app: ticketingpayments
+    spec:
+      containers:
+        - name: ticketingpayments
+          image: williangrios/ticketingpayments
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom: # AQUI PEGAMOS O ID DO POD
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: MONGO_URI
+              value: 'mongodb://ticketingpayments-mongo-srv:27017/ticketingpayments'
+            # - name: JWT_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: JWT_KEY
+            - name: STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketingpayments-srv
+spec:
+  selector:
+    app: ticketingpayments
+  ports:
+    - name: ticketingpayments
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
