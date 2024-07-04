@@ -40,3 +40,19 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: williangrios/ticketingexpiration
+      context: ticketingexpiration
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: williangrios/ticketingpayments
+      context: ticketingpayments
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
