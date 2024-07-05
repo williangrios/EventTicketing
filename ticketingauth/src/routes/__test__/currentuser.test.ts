@@ -1,4 +1,3 @@
-import { currentUser } from './../../../../commom/src/middlewares/current-user'
 import request from 'supertest'
 import { app } from '../../app'
 
