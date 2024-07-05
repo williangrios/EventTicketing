@@ -1,3 +1,4 @@
+import { currentUser } from './../../../../commom/src/middlewares/current-user'
 import request from 'supertest'
 import { app } from '../../app'
 
@@ -15,7 +16,7 @@ it('should respond with details about the current user', async () => {
   )
 })
 
-it.only('responds with null if not authenticated', async () => {
+it('responds with null if not authenticated', async () => {
   const responseCurrentUser = await request(app)
     .get('/api/users/currentuser')
     // note que não estou enviando cookie aqui pois não esta autenticado
