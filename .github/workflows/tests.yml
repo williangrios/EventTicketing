@@ -1,14 +1,12 @@
-# nome do workflow
 name: tests
 
-# determinar quando vamos rodar este workflow (code pushed, pull request created, pull request closed etc)
 on:
   pull_request
 
-jobs: # vai fazer isso sempre que um PR for criado, reaberto ou atualizado
+jobs: 
   build:
-    runs-on: ubuntu-latest # vai startar uma virtual machine
+    runs-on: ubuntu-latest 
     steps:
-      - uses: actions/checkout@v2 # pegar todo o código do nosso projeto
-      - run: cd auth && npm install && npm run test:ci # instalando as deps e rodando os testes
+      - uses: actions/checkout@v2 
+      - run: cd auth && npm install && npm run test:ci 
       
