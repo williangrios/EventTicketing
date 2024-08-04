@@ -1,0 +1,23 @@
+name: deploy-manifest
+
+on: # vai rodar este workflow uando houver um merge na branch main (diretorio ticketingauth)
+  push:
+    branches:
+      - main
+    paths:
+      - 'infra/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest #docker já esta preinstalado aqui
+    steps:
+      - uses: actions/checkout@v2
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} # autenticamos e instalamos doct l
+      - run:
+          doctl kubernetes cluster kubeconfig save ticketing # connect credentials to digital
+          # ocean kubernetes cluster
+      - run:
+          kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod # apply all of config files we
+          # placed in k8s directory
