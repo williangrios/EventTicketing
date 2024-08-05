@@ -1,0 +1,28 @@
+name: deploy-ticketingexpiration
+
+on: # vai rodar este workflow uando houver um merge na branch main (diretorio ticketingexpiration)
+  push:
+    branches:
+      - main
+    paths:
+      - 'ticketingexpiration/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest #docker já esta preinstalado aqui
+    steps:
+      - uses: actions/checkout@v2 # checkout all of our code insite of repo
+      - run: cd ticketingexpiration && docker build -t williangrios/ticketingexpiration . # criando a imagem
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD # faz login no docker
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker push williangrios/ticketingexpiration # faz um push para o docker hub
+      - uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} # autenticamos e instalamos doct l
+      - run:
+          doctl kubernetes cluster kubeconfig save ticketing # connect credentials to digital
+          # ocean kubernetes cluster
+      - run: kubectl rollout restart deployment ticketingexpiration-depl # restart ticketingexpiration
+

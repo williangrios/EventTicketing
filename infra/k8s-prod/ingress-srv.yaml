@@ -1,0 +1,52 @@
+# aqui vou definir algumas configurações para dizer ao ingress nginx controller como lidar
+# com as requisições de entrada
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  rules:
+    - host: ticketing.com.br
+      http:
+        paths:
+          # quando uma requisição chega no nginx, a tentativa de match é de cima para baixo
+          - path: /api/payments/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ticketingpayments-srv
+                port:
+                  number: 3000
+          - path: /api/users/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ticketingauth-srv
+                port:
+                  number: 3000
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
+          - path: /api/orders/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ticketingorders-srv
+                port:
+                  number: 3000
+          # essa expressão vai pegar todas as requisições que não deram match anteriormente
+          # por isso o client tem que ficar por ultimo
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: ticketingclient-srv
+                port:
+                  number: 3000

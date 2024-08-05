@@ -1,25 +1,25 @@
-import express from 'express'
-import 'express-async-errors'
-import { currentUserRouter } from './routes/current-user'
-import { signInRouter } from './routes/signin'
-import { signOutRouter } from './routes/signout'
-import { signUpRouter } from './routes/signup'
-import { errorHandler } from './middlewares/error-handler'
-import NotFoundError from './errors/not-found-error'
+import mongoose from 'mongoose'
+import { app } from './app'
 
-const app = express()
+const start = async () => {
+  // if (!process.env.JWT_KEY) {
+  //   throw new Error('JWT_KEY must be defined')
+  // }
+  console.log('Starting up...')
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI must be defined')
+  }
 
-app.use(express.json())
-app.use(currentUserRouter)
-app.use(signInRouter)
-app.use(signOutRouter)
-app.use(signUpRouter)
-app.all('*', async () => {
-  throw new NotFoundError()
-})
-app.use(errorHandler)
+  try {
+    await mongoose.connect(process.env.MONGO_URI)
+    console.log('connected to mongodb')
+  } catch (error) {
+    console.error(error)
+  }
+  const PORT = 3000
+  app.listen(PORT, () => {
+    console.log('TICKETING AUTH SERVICE LISTENING ON PORT-- ', PORT)
+  })
+}
 
-const PORT = 3000
-app.listen(PORT, () => {
-  console.log('TICKETING AUTH SERVICE LISTENING ON PORT-- ', PORT)
-})
+start()
