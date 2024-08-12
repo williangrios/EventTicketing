@@ -1,0 +1,13 @@
+name: tests-ticketingorders
+
+on:
+  pull_request:
+    paths:
+      - 'ticketingorders/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd ticketingorders && npm install && npm run test:ci
